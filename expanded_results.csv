@@ -1,0 +1,69 @@
+bit_length,prime,test_name,is_smooth,description,algorithm,time_seconds,result,status,memory_estimate
+16,65537,Tiny Prime,False,Basic 16-bit test,Brute Force,0.0006194000598043203,1543,PASSED,1000
+16,65537,Tiny Prime,False,Basic 16-bit test,Baby-step Giant-step,0.00011249992530792952,1543,PASSED,7196
+16,65537,Tiny Prime,False,Basic 16-bit test,Pollard's Rho,0.00021249998826533556,1543,PASSED,1000
+16,65537,Tiny Prime,False,Basic 16-bit test,Pohlig-Hellman,0.00010069995187222958,1543,PASSED,1000
+20,1048583,Small Prime,False,20-bit non-smooth,Brute Force,0.030996200046502054,45678,PASSED,1000
+20,1048583,Small Prime,False,20-bit non-smooth,Baby-step Giant-step,0.0009082999313250184,45678,PASSED,28700
+20,1048583,Small Prime,False,20-bit non-smooth,Pollard's Rho,0.0005668000085279346,45678,PASSED,1000
+20,1048583,Small Prime,False,20-bit non-smooth,Pohlig-Hellman,6.19000056758523e-05,45678,PASSED,1000
+24,16777259,Medium Prime,False,24-bit standard,Brute Force,1.0695947000058368,1234567,PASSED,1000
+24,16777259,Medium Prime,False,24-bit standard,Baby-step Giant-step,0.002352299983613193,1234567,PASSED,114716
+24,16777259,Medium Prime,False,24-bit standard,Pollard's Rho,0.0019583000103011727,1234567,PASSED,1000
+24,16777259,Medium Prime,False,24-bit standard,Pohlig-Hellman,0.002503800089471042,9623196,PASSED,1000
+26,106696591,Smooth Prime,True,26-bit smooth p-1,Brute Force,1.1215427001006901,1234567,PASSED,1000
+26,106696591,Smooth Prime,True,26-bit smooth p-1,Baby-step Giant-step,0.006061099935323,1234567,PASSED,289240
+26,106696591,Smooth Prime,True,26-bit smooth p-1,Pollard's Rho,0.011586999986320734,1234567,PASSED,1000
+26,106696591,Smooth Prime,True,26-bit smooth p-1,Pohlig-Hellman,0.00013339996803551912,1234567,PASSED,1000
+28,268435459,Hard Prime,False,28-bit non-smooth,Brute Force,13.423119300045073,12345678,PASSED,1000
+28,268435459,Hard Prime,False,28-bit non-smooth,Baby-step Giant-step,0.010790999978780746,12345678,PASSED,458780
+28,268435459,Hard Prime,False,28-bit non-smooth,Pollard's Rho,0.024029699969105422,12345678,PASSED,1000
+28,268435459,Hard Prime,False,28-bit non-smooth,Pohlig-Hellman,0.040622100001201034,12345678,PASSED,1000
+32,4294967311,Large Prime,False,32-bit large,Brute Force,,,SKIPPED,
+32,4294967311,Large Prime,False,32-bit large,Baby-step Giant-step,0.1186085999943316,123456789,PASSED,1835036
+32,4294967311,Large Prime,False,32-bit large,Pollard's Rho,0.10303800005931407,123456789,PASSED,1000
+32,4294967311,Large Prime,False,32-bit large,Pohlig-Hellman,,,SKIPPED,
+40,1099511627791,XL Prime,False,40-bit extra large,Brute Force,,,SKIPPED,
+40,1099511627791,XL Prime,False,40-bit extra large,Baby-step Giant-step,2.4258875000523403,987654321,PASSED,29360156
+40,1099511627791,XL Prime,False,40-bit extra large,Pollard's Rho,0.7690154999727383,987654321,PASSED,1000
+40,1099511627791,XL Prime,False,40-bit extra large,Pohlig-Hellman,,,SKIPPED,
+32,2319926863,Smooth (32-bit),True,Generated 32-bit smooth,Brute Force,,,SKIPPED,
+32,2319926863,Smooth (32-bit),True,Generated 32-bit smooth,Baby-step Giant-step,0.08776989998295903,265370396,PASSED,1348648
+32,2319926863,Smooth (32-bit),True,Generated 32-bit smooth,Pollard's Rho,0.01902220002375543,265370396,PASSED,1000
+32,2319926863,Smooth (32-bit),True,Generated 32-bit smooth,Pohlig-Hellman,0.00034850009251385927,265370396,PASSED,1000
+36,90679867363,Smooth (36-bit),True,Generated 36-bit smooth,Brute Force,,,SKIPPED,
+36,90679867363,Smooth (36-bit),True,Generated 36-bit smooth,Baby-step Giant-step,0.5509604999097064,17443434210,PASSED,8431668
+36,90679867363,Smooth (36-bit),True,Generated 36-bit smooth,Pollard's Rho,0.13259890000335872,17443434210,PASSED,1000
+36,90679867363,Smooth (36-bit),True,Generated 36-bit smooth,Pohlig-Hellman,0.00036079995334148407,17443434210,PASSED,1000
+40,657400530481,Smooth (40-bit),True,Generated 40-bit smooth,Brute Force,,,SKIPPED,
+40,657400530481,Smooth (40-bit),True,Generated 40-bit smooth,Baby-step Giant-step,2.219729600008577,611496585680,PASSED,22702484
+40,657400530481,Smooth (40-bit),True,Generated 40-bit smooth,Pollard's Rho,1.6493000999325886,611496585680,PASSED,1000
+40,657400530481,Smooth (40-bit),True,Generated 40-bit smooth,Pohlig-Hellman,0.0002609000075608492,611496585680,PASSED,1000
+44,4930702511197,Smooth (44-bit),True,Generated 44-bit smooth,Brute Force,,,SKIPPED,
+44,4930702511197,Smooth (44-bit),True,Generated 44-bit smooth,Baby-step Giant-step,5.984173199976794,531221026322,PASSED,62174532
+44,4930702511197,Smooth (44-bit),True,Generated 44-bit smooth,Pollard's Rho,3.8469012998975813,531221026322,PASSED,1000
+44,4930702511197,Smooth (44-bit),True,Generated 44-bit smooth,Pohlig-Hellman,0.000614799908362329,531221026322,PASSED,1000
+48,115501131165421,Smooth (48-bit),True,Generated 48-bit smooth,Brute Force,,,SKIPPED,
+48,115501131165421,Smooth (48-bit),True,Generated 48-bit smooth,Baby-step Giant-step,36.62451580003835,86827958677059,PASSED,300920088
+48,115501131165421,Smooth (48-bit),True,Generated 48-bit smooth,Pollard's Rho,10.51138380006887,86827958677059,PASSED,1000
+48,115501131165421,Smooth (48-bit),True,Generated 48-bit smooth,Pohlig-Hellman,0.00040600006468594074,86827958677059,PASSED,1000
+18,149197,Random (18-bit),True,Random 18-bit smooth,Brute Force,0.07046489999629557,91744,PASSED,1000
+18,149197,Random (18-bit),True,Random 18-bit smooth,Baby-step Giant-step,0.00041500001680105925,91744,PASSED,10836
+18,149197,Random (18-bit),True,Random 18-bit smooth,Pollard's Rho,0.0007745000766590238,91744,PASSED,1000
+18,149197,Random (18-bit),True,Random 18-bit smooth,Pohlig-Hellman,0.004143900005146861,91744,PASSED,1000
+22,4176077,Random (22-bit),True,Random 22-bit smooth,Brute Force,0.5030874999938533,621022,PASSED,1000
+22,4176077,Random (22-bit),True,Random 22-bit smooth,Baby-step Giant-step,0.0011526000453159213,621022,PASSED,57232
+22,4176077,Random (22-bit),True,Random 22-bit smooth,Pollard's Rho,0.002559299929998815,621022,PASSED,1000
+22,4176077,Random (22-bit),True,Random 22-bit smooth,Pohlig-Hellman,0.5370262999786064,621022,PASSED,1000
+26,42487579,Random (26-bit),True,Random 26-bit smooth,Brute Force,30.53942799998913,28740434,PASSED,1000
+26,42487579,Random (26-bit),True,Random 26-bit smooth,Baby-step Giant-step,0.0044862000504508615,28740434,PASSED,182532
+26,42487579,Random (26-bit),True,Random 26-bit smooth,Pollard's Rho,0.008549500023946166,28740434,PASSED,1000
+26,42487579,Random (26-bit),True,Random 26-bit smooth,Pohlig-Hellman,0.00017410004511475563,28740434,PASSED,1000
+30,595510499,Random (30-bit),True,Random 30-bit smooth,Brute Force,,,SKIPPED,
+30,595510499,Random (30-bit),True,Random 30-bit smooth,Baby-step Giant-step,0.02692819992080331,290341273,PASSED,683312
+30,595510499,Random (30-bit),True,Random 30-bit smooth,Pollard's Rho,0.0073327000718563795,290341273,PASSED,1000
+30,595510499,Random (30-bit),True,Random 30-bit smooth,Pohlig-Hellman,0.0014027999714016914,290341273,PASSED,1000
+34,11981382559,Random (34-bit),True,Random 34-bit smooth,Brute Force,,,SKIPPED,
+34,11981382559,Random (34-bit),True,Random 34-bit smooth,Baby-step Giant-step,0.19461210002191365,2934493231,PASSED,3064880
+34,11981382559,Random (34-bit),True,Random 34-bit smooth,Pollard's Rho,0.20976800005882978,2934493231,PASSED,1000
+34,11981382559,Random (34-bit),True,Random 34-bit smooth,Pohlig-Hellman,0.35777960007544607,2934493231,PASSED,1000
