@@ -22,7 +22,7 @@ python expanded_benchmark.py
 - `expanded_results.csv` - detailed benchmark data with memory estimates
 - Console output with all test case results
 
-**Duration:** ~5-30 minutes depending on CPU and system load
+**Duration:** ~30-60 minutes depending on CPU and system load (exhaustive testing)
 
 **What it does:**
 - Tests 16-bit to 48-bit primes
@@ -45,8 +45,9 @@ python visualize_analysis.py
 - `graphs/smooth_vs_nonsmooth.png` - Pohlig-Hellman vulnerability
 - `graphs/memory_analysis.png` - Memory usage estimates
 - `graphs/algorithm_comparison.png` - Side-by-side performance
+- Plus 15 additional specialized graphs for complexity analysis
 
-**Duration:** ~2-5 seconds
+**Duration:** ~5-10 seconds
 
 **Note:** Requires `expanded_results.csv` from Stage 1
 
@@ -111,7 +112,7 @@ python parallel_brute_force.py
 python enhanced_pohlig_hellman.py
 ```
 
-**Total time: ~30-60 minutes**
+**Total time: ~60-120 minutes**
 
 ---
 
@@ -206,10 +207,10 @@ python enhanced_pohlig_hellman.py
 
 | Hardware | Expanded Benchmark | Visualizations | Total |
 |----------|-------------------|-----------------|-------|
-| Modern Desktop (8-core) | 10-20 min | <1 min | ~20 min |
-| Laptop (4-core) | 20-40 min | 1-2 min | ~40 min |
-| High-end Workstation | 5-10 min | <1 min | ~10 min |
-| Virtual Machine | 30-60 min | 2-5 min | ~60 min |
+| Modern Desktop (8-core) | 30-60 min | 1-2 min | ~60 min |
+| Laptop (4-core) | 60-120 min | 2-5 min | ~120 min |
+| High-end Workstation | 15-30 min | <1 min | ~30 min |
+| Virtual Machine | 120-240 min | 5-10 min | ~240 min |
 
 ---
 
@@ -232,5 +233,23 @@ analysis/
     ├── runtime_vs_bits.png
     ├── smooth_vs_nonsmooth.png
     ├── memory_analysis.png
-    └── algorithm_comparison.png
+    ├── algorithm_comparison.png
+    ├── complexity_scaling.png
+    ├── algorithm_speedup.png
+    ├── time_memory_tradeoff.png
+    ├── algorithm_frontier.png
+    ├── smooth_comparison.png
+    ├── runtime_distribution.png
+    ├── memory_usage.png
+    ├── algorithm_scaling.png
+    ├── weak_vs_normal.png
+    ├── brute_force_comparison.png
+    ├── baby_step_giant_step_comparison.png
+    ├── pollard_s_rho_comparison.png
+    ├── pohlig_hellman_comparison.png
+    ├── brute_force_complexity.png
+    ├── baby_step_giant_step_complexity.png
+    ├── pollard_s_rho_complexity.png
+    ├── pohlig_hellman_complexity.png
+    └── performance_heatmap.png
 ```

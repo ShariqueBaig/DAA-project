@@ -41,11 +41,28 @@ analysis/
 │
 └── Generated Outputs (after running)
     ├── expanded_results.csv           # Benchmark data
-    └── graphs/                        # Visualization PNGs
+    └── graphs/                        # Visualization PNGs (19 graphs)
         ├── runtime_vs_bits.png
         ├── smooth_vs_nonsmooth.png
         ├── memory_analysis.png
-        └── algorithm_comparison.png
+        ├── algorithm_comparison.png
+        ├── complexity_scaling.png
+        ├── algorithm_speedup.png
+        ├── time_memory_tradeoff.png
+        ├── algorithm_frontier.png
+        ├── smooth_comparison.png
+        ├── runtime_distribution.png
+        ├── memory_usage.png
+        ├── algorithm_scaling.png
+        ├── weak_vs_normal.png
+        ├── brute_force_comparison.png
+        ├── baby_step_giant_step_comparison.png
+        ├── pollard_s_rho_comparison.png
+        ├── pohlig_hellman_comparison.png
+        ├── brute_force_complexity.png
+        ├── baby_step_giant_step_complexity.png
+        ├── pollard_s_rho_complexity.png
+        └── pohlig_hellman_complexity.png
 ```
 
 ---
@@ -73,7 +90,7 @@ This automatically runs all stages in the correct order:
 2. Creates visualizations (~1-2 minutes)
 3. Optional: Runs advanced tests
 
-**Expected output:** `expanded_results.csv` + 4 PNG graphs
+**Expected output:** `expanded_results.csv` + 19 PNG graphs
 
 ---
 
@@ -90,9 +107,9 @@ This automatically runs all stages in the correct order:
 | **Parallel Brute Force** | O(p/n) | O(1/n) | Multiprocessing speedup |
 
 ### Test Coverage
-- **Bit lengths:** 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 40, 44, 48 bits
-- **Prime types:** Smooth (small factors) and random/hard primes
-- **Test cases:** 20+ auto-generated with varying generators and exponents
+- **Bit lengths:** 16-64 bits (weak and normal primes)
+- **Prime types:** Weak (smooth p-1) and normal (random) primes
+- **Test cases:** 20+ auto-generated with varying generators and exponents, plus large datasets
 - **Metrics:** Execution time, memory usage, correctness status
 
 ---
@@ -180,6 +197,18 @@ Detailed benchmark results with columns:
 2. **smooth_vs_nonsmooth.png** - Pohlig-Hellman performance comparison
 3. **memory_analysis.png** - Memory usage by algorithm and bit length
 4. **algorithm_comparison.png** - Side-by-side performance at each bit length
+5. **complexity_scaling.png** - Log-log plot validating O(√p) bounds
+6. **algorithm_speedup.png** - Speedup factor vs brute force
+7. **time_memory_tradeoff.png** - Time vs memory scatter plot
+8. **algorithm_frontier.png** - Best algorithm per bit length
+9. **smooth_comparison.png** - Smooth vs non-smooth at same bit lengths
+10. **runtime_distribution.png** - Distribution of execution times
+11. **memory_usage.png** - Memory usage over bit lengths
+12. **algorithm_scaling.png** - Scaling with theoretical overlays
+13. **weak_vs_normal.png** - Weak vs normal primes comparison
+14-17. **Individual algorithm comparisons** - Separate plots for each algorithm differentiating weak/normal
+18. **Complexity overlays** - Empirical vs theoretical for each algorithm
+19. **performance_heatmap.png** - Heatmap of log times across algorithms/bits
 
 ---
 
@@ -216,17 +245,17 @@ Detailed benchmark results with columns:
 ### By Hardware
 | System | Expanded Benchmark | Visualizations | Total |
 |--------|-------------------|-----------------|-------|
-| Modern Desktop (8-core, 16GB RAM) | 10-20 min | <1 min | ~20 min |
-| Laptop (4-core, 8GB RAM) | 20-40 min | 1-2 min | ~40 min |
-| Server (16-core, 64GB RAM) | 5-10 min | <1 min | ~10 min |
-| VM (4-core, 4GB RAM) | 30-60 min | 2-5 min | ~60 min |
+| Modern Desktop (8-core, 16GB RAM) | 30-60 min | 1-2 min | ~60 min |
+| Laptop (4-core, 8GB RAM) | 60-120 min | 2-5 min | ~120 min |
+| Server (16-core, 64GB RAM) | 15-30 min | 1-2 min | ~30 min |
+| VM (4-core, 4GB RAM) | 120-240 min | 5-10 min | ~240 min |
 
 ### By Stage (Typical Desktop)
-- Expanded Benchmarking: 15-30 minutes
-- Visualization: 1-2 seconds
+- Expanded Benchmarking: 30-60 minutes (exhaustive on large datasets)
+- Visualization: 5-10 seconds (19 graphs)
 - Parallel Testing: 10-30 seconds
 - Enhanced PH: 2-5 seconds
-- Stress Testing: 5-60 minutes (optional)
+- Stress Testing: 10-120 minutes (optional)
 
 ---
 
