@@ -22,47 +22,35 @@ from dlp_algorithms import (
 # ============================================================================
 
 # Hard timeout: 10 minutes = 600 seconds for ALL algorithms
-HARD_TIMEOUT = 600  # 10 minutes
+HARD_TIMEOUT = 600
 
-# Bit lengths to test - start small, go up reasonably
-BIT_LENGTHS = [16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56]
+# Bit lengths to test - extensive but reasonable
+BIT_LENGTHS = [16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54]
 
-# Maximum bits per algorithm (where they typically timeout)
+# Maximum bits per algorithm
 MAX_BITS_PER_ALGO = {
-    "Brute Force": 56,      # Will timeout around 30-32 bits
-    "BSGS": 56,             # Memory bound
-    "Pollard's Rho": 56,    # Scales well
-    "Pohlig-Hellman": 56    # Fast on weak, slower on hard
+    "Brute Force": 32,
+    "BSGS": 50,
+    "Pollard's Rho": 54,
+    "Pohlig-Hellman": 54
 }
 
 # Output file
 OUTPUT_CSV = "benchmark_results.csv"
 
-# Algorithms (4 core algorithms)
+# Algorithms
 ALGORITHMS = {
-    "Brute Force": {
-        "func": brute_force,
-        "timeout": HARD_TIMEOUT
-    },
-    "BSGS": {
-        "func": bsgs,
-        "timeout": HARD_TIMEOUT
-    },
-    "Pollard's Rho": {
-        "func": pollards_rho,
-        "timeout": HARD_TIMEOUT
-    },
-    "Pohlig-Hellman": {
-        "func": pohlig_hellman,
-        "timeout": HARD_TIMEOUT
-    }
+    "Brute Force": {"func": brute_force, "timeout": HARD_TIMEOUT},
+    "BSGS": {"func": bsgs, "timeout": HARD_TIMEOUT},
+    "Pollard's Rho": {"func": pollards_rho, "timeout": HARD_TIMEOUT},
+    "Pohlig-Hellman": {"func": pohlig_hellman, "timeout": HARD_TIMEOUT}
 }
 
-# Dataset types
+# Datasets
 DATASETS = {
     "weak": {
         "generator": generate_smooth_prime,
-        "description": "Weak primes - p-1 has only small factors",
+        "description": "Weak primes - p-1 has ONLY small factors (all <= 53)",
         "color": "#e74c3c"
     },
     "random": {
@@ -72,7 +60,7 @@ DATASETS = {
     },
     "hard": {
         "generator": generate_hard_prime,
-        "description": "Hard primes - p-1 has large prime factors",
+        "description": "Hard primes - p = 2q+1 (safe primes), p-1 has ONE large factor",
         "color": "#2ecc71"
     }
 }
@@ -88,7 +76,7 @@ class Benchmark:
         self.start_time = time.perf_counter()
         
     def generate_test_case(self, bits, dataset_type):
-        """Generate a test case (p, g, x) for given bit length and dataset"""
+        """Generate a test case with exponent in the LATER half (70-95% range)"""
         generator_func = DATASETS[dataset_type]["generator"]
         
         # Generate prime
@@ -99,8 +87,17 @@ class Benchmark:
         # Find primitive root generator
         g = find_primitive_root(p)
         
-        # Random exponent (keep within reasonable range)
-        x = random.randint(1, min(10**7, p-2))  # Cap for reasonable testing
+        # Generate exponent in the LATER half for better analysis
+        # Use 70-95% of the range to make brute force search harder
+        max_x = p - 2
+        lower_bound = int(max_x * 0.7)  # Start at 70%
+        upper_bound = int(max_x * 0.95)  # End at 95%
+        
+        # Ensure we have valid range
+        if lower_bound >= upper_bound:
+            lower_bound = max_x // 2
+        
+        x = random.randint(lower_bound, upper_bound)
         
         # Compute h
         h = pow(g, x, p)
@@ -112,7 +109,8 @@ class Benchmark:
             "exponent": x,
             "target": h,
             "dataset": dataset_type,
-            "p_minus_1_factors": prime_factors(p-1)
+            "p_minus_1_factors": prime_factors(p-1),
+            "exponent_position": f"{x}/{max_x} ({100*x/max_x:.1f}%)"
         }
     
     def run_algorithm(self, algo_name, algo_config, test_case):
@@ -179,14 +177,13 @@ class Benchmark:
     def estimate_memory(self, algo_name, bits):
         """Estimate memory usage for an algorithm"""
         if algo_name == "BSGS":
-            # O(√p) entries, each ~72 bytes for dict entry
             p_approx = 1 << bits
             entries = int(math.isqrt(p_approx))
-            return entries * 72  # bytes
+            return entries * 72
         elif algo_name in ["Brute Force", "Pollard's Rho"]:
-            return 1024  # ~1KB constant
+            return 1024
         elif algo_name == "Pohlig-Hellman":
-            return 4096  # ~4KB
+            return 2048
         else:
             return 8192
     
@@ -198,6 +195,7 @@ class Benchmark:
         print(f"  HARD TIMEOUT: {HARD_TIMEOUT} seconds ({HARD_TIMEOUT/60} minutes)")
         print(f"  Bit lengths: {BIT_LENGTHS}")
         print(f"  Datasets: {', '.join(DATASETS.keys())}")
+        print(f"  Exponents: Generated in LATER half (70-95% of range)")
         print("="*80)
         
         total_tests = len(BIT_LENGTHS) * len(DATASETS) * len(ALGORITHMS)
@@ -218,8 +216,9 @@ class Benchmark:
                 
                 print(f"  Prime: {test_case['prime']}")
                 print(f"  Generator: {test_case['generator']}")
-                print(f"  Expected x: {test_case['exponent']}")
-                print(f"  p-1 factors: {dict(list(test_case['p_minus_1_factors'].items())[:5])}...")
+                print(f"  Expected x: {test_case['exponent']} ({test_case['exponent_position']})")
+                factors_str = str(dict(list(test_case['p_minus_1_factors'].items())[:3]))
+                print(f"  p-1 factors: {factors_str}...")
                 print(f"\n  {'Algorithm':<20} {'Status':<12} {'Time (s)':<12} {'Result':<20}")
                 print(f"  {'-'*70}")
                 
@@ -238,6 +237,7 @@ class Benchmark:
                         "prime": test_case["prime"],
                         "generator": test_case["generator"],
                         "expected_x": test_case["exponent"],
+                        "exponent_position": test_case["exponent_position"],
                         "target_h": test_case["target"],
                         "algorithm": algo_name,
                         "status": result_data["status"],
@@ -275,8 +275,9 @@ class Benchmark:
         with open(OUTPUT_CSV, 'w', newline='') as f:
             fieldnames = [
                 "test_id", "bit_length", "dataset", "prime", "generator",
-                "expected_x", "target_h", "algorithm", "status", 
-                "time_seconds", "result_x", "timeout_occurred", "memory_estimate_bytes"
+                "expected_x", "exponent_position", "target_h", "algorithm", 
+                "status", "time_seconds", "result_x", "timeout_occurred", 
+                "memory_estimate_bytes"
             ]
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()

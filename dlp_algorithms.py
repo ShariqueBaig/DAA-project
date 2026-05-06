@@ -1,6 +1,6 @@
 """
 Discrete Logarithm Problem - Core Algorithm Implementations
-4 algorithms: Brute Force, BSGS, Pollard's Rho, Pohlig-Hellman
+4 algorithms: Brute Force, BSGS, Pollard's Rho, Vanilla Pohlig-Hellman
 """
 
 import math
@@ -214,13 +214,14 @@ def pollards_rho(g, h, p, timeout=600):
     return None, "FAILED"
 
 # ============================================================================
-# ALGORITHM 4: POHLIG-HELLMAN (SIMPLIFIED, CORRECTED)
+# ALGORITHM 4: POHLIG-HELLMAN (VANILLA - NO OPTIMIZATIONS)
 # ============================================================================
 
 def pohlig_hellman(g, h, p, timeout=600):
     """
-    Pohlig-Hellman algorithm using CRT
-    Fast when p-1 has small prime factors
+    Vanilla Pohlig-Hellman algorithm - NO optimizations
+    Uses brute force for ALL subgroup calculations (no BSGS)
+    This is the pure, textbook implementation
     """
     start_time = time.perf_counter()
     order = p - 1
@@ -253,35 +254,13 @@ def pohlig_hellman(g, h, p, timeout=600):
             # Compute g^(order/q)
             g_pow = pow(g, order // q, p)
             
-            # Solve discrete log in subgroup of order q
-            # For q small: brute force
-            # For q larger but still moderate: use baby-step giant-step
+            # VANILLA: Use pure brute force for ALL subgroup calculations
+            # No BSGS, no optimizations - just linear search
             x_i = None
-            
-            if q <= 10000:  # Small enough for brute force
-                for j in range(q):
-                    if pow(g_pow, j, p) == gamma_pow:
-                        x_i = j
-                        break
-            else:
-                # Use BSGS for larger subgroups
-                m = math.isqrt(q) + 1
-                table = {}
-                curr = 1
-                for j in range(m):
-                    if curr not in table:
-                        table[curr] = j
-                    curr = (curr * g_pow) % p
-                
-                gm = pow(g_pow, m, p)
-                inv_gm = modinv(gm, p)
-                if inv_gm is not None:
-                    curr = gamma_pow
-                    for j in range(m):
-                        if curr in table:
-                            x_i = j * m + table[curr]
-                            break
-                        curr = (curr * inv_gm) % p
+            for j in range(q):
+                if pow(g_pow, j, p) == gamma_pow:
+                    x_i = j
+                    break
             
             if x_i is None:
                 return None, "FAILED"
@@ -289,7 +268,6 @@ def pohlig_hellman(g, h, p, timeout=600):
             x_mod += x_i * (q ** i)
             
             # Update gamma for next iteration
-            # gamma = gamma * g^{-x_i * q^i}
             inv_g = modinv(g, p)
             if inv_g is None:
                 return None, "FAILED"
@@ -320,15 +298,15 @@ def generate_prime(bits, max_attempts=5000):
         # Fallback
         for _ in range(max_attempts):
             candidate = random.getrandbits(bits)
-            candidate |= (1 << (bits - 1)) | 1  # Ensure odd and correct bit length
+            candidate |= (1 << (bits - 1)) | 1
             if isprime(candidate):
                 return candidate
     return None
 
 def generate_smooth_prime(bits, max_seconds=60):
     """
-    Generate a prime where p-1 has only small prime factors
-    These are vulnerable to Pohlig-Hellman
+    Generate a prime where p-1 has ONLY small prime factors (all factors <= 53)
+    These are extremely vulnerable to Pohlig-Hellman
     """
     from sympy import isprime
     
@@ -338,29 +316,30 @@ def generate_smooth_prime(bits, max_seconds=60):
     start_time = time.perf_counter()
     
     while (time.perf_counter() - start_time) < max_seconds:
-        # Build p-1 from small primes
+        # Build p-1 from small primes only
         n = 1
         while n.bit_length() < bits - 2:
             n *= random.choice(small_primes)
         
         p = n + 1
         if p.bit_length() == bits and isprime(p):
-            # Verify all prime factors are small
+            # Verify ALL prime factors are small
             factors = prime_factors(p-1)
-            if all(f <= max(small_primes) for f in factors):
+            if all(f <= 53 for f in factors):
                 return p
     
     return None
 
 def generate_hard_prime(bits, max_attempts=100):
     """
-    Generate a prime where p-1 has a large prime factor
-    These are resistant to Pohlig-Hellman
+    Generate a SAFE prime: p = 2q + 1 where q is also prime
+    This makes p-1 = 2q, which has ONE large prime factor q
+    This is the standard for cryptographic hardness
     """
     from sympy import isprime
     
     for _ in range(max_attempts):
-        # Generate safe prime: p = 2q + 1 where q is prime
+        # Generate a large prime q of size bits-1
         q = generate_prime(bits - 1)
         if q is None:
             continue
