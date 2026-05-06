@@ -29,8 +29,8 @@ BIT_LENGTHS = [16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 4
 
 # Maximum bits per algorithm (where they typically timeout)
 MAX_BITS_PER_ALGO = {
-    "Brute Force": 32,      # Will timeout around 30-32 bits
-    "BSGS": 52,             # Memory bound
+    "Brute Force": 56,      # Will timeout around 30-32 bits
+    "BSGS": 56,             # Memory bound
     "Pollard's Rho": 56,    # Scales well
     "Pohlig-Hellman": 56    # Fast on weak, slower on hard
 }

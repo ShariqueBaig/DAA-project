@@ -249,7 +249,7 @@ def plot_memory_comparison(results):
     print(f"  ✓ Saved: {filename}")
 
 def plot_complexity_validation(results):
-    """Log-log plot validating theoretical complexities - FIXED"""
+    """Log-log plot validating theoretical complexities - FIXED with pow()"""
     fig, ax = plt.subplots(figsize=(14, 8))
     
     # Find min and max bit lengths for reference lines
@@ -296,19 +296,18 @@ def plot_complexity_validation(results):
                  label=f'{algo} (empirical)',
                  alpha=0.8)
     
-    # Theoretical lines - only for bit lengths >= 16
+    # Theoretical lines - using pow() with float base for negative exponents
     n_range = np.array([16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50])
     # Filter to our range
     n_range = n_range[(n_range >= min_bit) & (n_range <= max_bit + 4)]
     
     if len(n_range) > 0:
-        # O(2^n) reference - using float exponent to avoid negative power error
-        # Normalized to match empirical data scale
-        o2n = [2 ** (n - 20) * 0.0001 for n in n_range]
+        # O(2^n) reference - use pow(2.0, exponent) for float exponentiation
+        o2n = [pow(2.0, n - 20) * 0.0001 for n in n_range]
         ax.loglog(n_range, o2n, 'k--', linewidth=2, alpha=0.5, label='O(2^n) reference')
         
         # O(2^(n/2)) reference
-        o2n2 = [2 ** ((n - 20) / 2) * 0.00001 for n in n_range]
+        o2n2 = [pow(2.0, (n - 20) / 2) * 0.00001 for n in n_range]
         ax.loglog(n_range, o2n2, 'k:', linewidth=2, alpha=0.5, label='O(2^(n/2)) reference')
     
     ax.set_xlabel('Prime Bit Length', fontweight='bold')
@@ -536,25 +535,27 @@ def generate_report(results):
         report_lines.append(f"\n3. BSGS max memory usage: {max_mem/1024/1024:.1f} MB")
     
     # Best scalability
-    report_lines.append(f"\n4. Best scalability: Pollard's Rho (constant memory, O(√p) time)")
+    report_lines.append(f"\n4. Best scalability: Pollard's Rho (constant memory, O(sqrt(p)) time)")
     report_lines.append(f"   Reached highest bit lengths before timeout")
     
     report_lines.append("\n" + "="*80)
     
-    # Save report
+    # Save report - use utf-8 encoding to handle all Unicode characters
     report_path = os.path.join(GRAPH_DIR, "analysis_report.txt")
-    with open(report_path, 'w') as f:
+    with open(report_path, 'w', encoding='utf-8') as f:
         f.write('\n'.join(report_lines))
     
     print(f"\n  ✓ Saved: analysis_report.txt")
-    # Print key findings to console
+    # Print key findings to console (using ASCII replacement for sqrt)
     print("\n" + "-"*40)
     print("KEY FINDINGS (from report):")
     print("-"*40)
     for line in report_lines[-20:]:
         if line.startswith("1.") or line.startswith("2.") or line.startswith("3.") or line.startswith("4."):
-            print(line)
-
+            # Replace Unicode sqrt with 'sqrt' for console output
+            console_line = line.replace('√', 'sqrt')
+            print(console_line)
+            
 def main():
     print("\n" + "="*60)
     print("  DLP ANALYSIS VISUALIZATION SUITE")
