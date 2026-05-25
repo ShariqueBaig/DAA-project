@@ -76,7 +76,6 @@ analysis/
 
 ### Installation
 ```bash
-cd analysis
 pip install -r requirements.txt
 ```
 
@@ -375,7 +374,6 @@ A: Modern systems use much larger primes (2048+ bits) where these attacks are in
 Everything is set up and ready to run. Start with:
 
 ```bash
-cd d:\IBA\Sem-6\DAA\Project\analysis
 python master_runner.py
 ```
 
